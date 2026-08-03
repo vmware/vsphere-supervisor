@@ -1,4 +1,4 @@
-# Appendix: Air-Gapped Deployment Using Harbor Supervisor Service
+# Appendix: Air-Gapped Deployment Using Bootstrap Registry Appliance
 
 ## In this document, we will only capture the additional steps and/or differences that have not been addressed in the [primary air gap install document](/airgapped/air-gapped.md) 
 
