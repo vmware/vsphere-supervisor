@@ -86,4 +86,4 @@ Phase ∞: General everyday documentation
 
 ## vSphere Supervisor Platform Documentation 
 
-![vsphere-supervisor](./images/vsphere-supervisor)
+![vsphere-supervisor](./images/vsphere-supervisor.png)
