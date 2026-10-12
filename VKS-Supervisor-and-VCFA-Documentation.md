@@ -78,10 +78,12 @@ Phase ∞: General everyday documentation
 
 ## Consumption Documentation {#consumption-documentation}
 
-![][/images/consumption.png]
+![consumption-documentation](./images/consumption.png)
 
 ## Service Administration Documentation {#service-administration-documentation}
 
-![][/images/service-admin.png]
+![service-administration](./images/service-admin.png)
 
-## vSphere Supervisor Platform Documentation ![][/images/vsphere-supervisor] {#vsphere-supervisor-platform-documentation}
+## vSphere Supervisor Platform Documentation 
+
+![vsphere-supervisor](./images/vsphere-supervisor)
