@@ -52,7 +52,7 @@ Phase ∞: General everyday documentation
 |  |  | [Argo CD](https://developer.broadcom.com/xapis/argocd-service-api/latest/) | Consumer API Documentation | API documentation of Argo CD related Custom Resources |
 |  |  | [VM Service (KubeVM)](https://developer.broadcom.com/xapis/vm-service/latest/) | Consumer API Documentation | API documentation of Argo CD related Custom Resources |
 
-# Document references {#documentation-reference}
+# Document references
 
 | Phase | Category | Sub-Category | Parent doc | Notes |
 | :---- | :---- | :---- | :---- | :---- |
@@ -76,11 +76,11 @@ Phase ∞: General everyday documentation
 
 # Documentation Screenshots
 
-## Consumption Documentation {#consumption-documentation}
+## Consumption Documentation
 
 ![consumption-documentation](./images/consumption.png)
 
-## Service Administration Documentation {#service-administration-documentation}
+## Service Administration Documentation
 
 ![service-administration](./images/service-admin.png)
 
