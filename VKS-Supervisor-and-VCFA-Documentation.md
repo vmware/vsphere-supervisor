@@ -2,7 +2,7 @@
 
 The following table of documentation links provide a comprehensive, curated index of essential links designed to guide Virtual Infrastructure (VI) Administrators and Platform Administrators through each stage of the Kubernetes Platform deployment. By following this structured roadmap, administrators can quickly identify key requirements, prerequisites, and operational guidelines across all phases. 
 
-Note that the resources referenced here represent specific snapshots within the broader ecosystem; for complete specifications and advanced configurations, refer to the primary parent categories listed in the section “[Document References](#document-references)”: vSphere Supervisor Administration, Service Administration and Management, Consumption, VCF Automation, and Consumption APIs.
+Note that the resources referenced here represent specific snapshots within the broader ecosystem; for complete specifications and advanced configurations, refer to the primary parent categories listed in the section [Document References](#documentation-reference): vSphere Supervisor Administration, Service Administration and Management, Consumption, VCF Automation, and Consumption APIs.
 
 Phase 1: Getting Started: Supervisor Deployment based on Network and Load Balancer  
 Phase 2: Harbor Service Registration & Install (Required for Software Depot deployments in 9.1.1+)  
@@ -52,7 +52,7 @@ Phase ∞: General everyday documentation
 |  |  | [Argo CD](https://developer.broadcom.com/xapis/argocd-service-api/latest/) | Consumer API Documentation | API documentation of Argo CD related Custom Resources |
 |  |  | [VM Service (KubeVM)](https://developer.broadcom.com/xapis/vm-service/latest/) | Consumer API Documentation | API documentation of Argo CD related Custom Resources |
 
-# [Document references](#document-references) {#document-references}
+# Document references {#documentation-reference}
 
 | Phase | Category | Sub-Category | Parent doc | Notes |
 | :---- | :---- | :---- | :---- | :---- |
