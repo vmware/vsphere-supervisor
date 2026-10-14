@@ -126,8 +126,8 @@ Two package manifest YAML files must be downloaded for each Supervisor Service. 
 
 | File Name on the download page | Purpose |
 |--------------------------------|---------|
-| Installation Package Manifest (VCF 9.0 or older and disconnected/airgapped VCF 9.1) | Used to identify the OCI image(s) to download from the source registry, as described below. |
-| Installation Package Manifest (Internet Connected VCF 9.1 and newer) | Used later to register and install the service on a Supervisor after the images are uploaded to Software Depot. |
+| Installation Package Manifest (packages.broadcom.com will reach EOS at the end of 2027) | Used to identify the OCI image(s) to download from the source registry, as described below. |
+| Installation Package Manifest (Supervisor 9.1 with Software Depot configured) | Used later to register and install the service on a Supervisor after the images are uploaded to Software Depot. |
 
 > [!NOTE]
 > The downloaded files are named differently from the **File Name** labels shown on the portal. For ArgoCD 1.1.0, the first manifest is `supervisor-service-argocd-legacy-1.1.0-25100889.yml` and the second is `supervisor-service-argocd-depot-1.1.0-25100889.yml`.
@@ -159,8 +159,8 @@ spec:
 #### Example: Download the ArgoCD Supervisor Service binaries and associated YAML files
 At the time of writing, the latest ArgoCD Supervisor Service version is **1.1.0**. Refer to the vSphere Supervisor Services page on the Broadcom Support Portal for newer versions. Following the steps in [Download the package manifest YAMLs](#download-the-package-manifest-yamls-from-the-broadcom-support-portal), download both manifests for version 1.1.0:
 
-* `supervisor-service-argocd-legacy-1.1.0-25100889.yml` (*Installation Package Manifest (VCF 9.0 or older and disconnected/airgapped VCF 9.1)*) &mdash; used **only** to look up the package-manifest image reference for migration (as described above).
-* `supervisor-service-argocd-depot-1.1.0-25100889.yml` (*Installation Package Manifest (Internet Connected VCF 9.1 and newer)*) &mdash; the configuration file used to register and install the ArgoCD Supervisor Service on a Supervisor 9.1.0 cluster after the images are uploaded to Software Depot.
+* `supervisor-service-argocd-legacy-1.1.0-25100889.yml` (*Installation Package Manifest (packages.broadcom.com will reach EOS at the end of 2027)*) &mdash; used **only** to look up the package-manifest image reference for migration (as described above).
+* `supervisor-service-argocd-depot-1.1.0-25100889.yml` (*Installation Package Manifest (Supervisor 9.1 with Software Depot configured)*) &mdash; the configuration file used to register and install the ArgoCD Supervisor Service on a Supervisor 9.1.0 cluster after the images are uploaded to Software Depot.
 
 Run the following command from the Bastion host to download the image bundle as a tarball using the [`oci_image_depot_migrator.py`](/airgapped/scripts/oci_image_depot_migrator.py) Python script. The script requires the `imgpkg` CLI and a Python 3 runtime to be installed on the Bastion host.
 
