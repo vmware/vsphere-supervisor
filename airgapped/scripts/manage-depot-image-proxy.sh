@@ -12,6 +12,8 @@
 #     vcf-depot CA, LoadBalancer Service (port 443 -> target 5005), then
 #     waits for LB ingress IP and appends depot FQDN -> IP to /etc/vmware/wcp/coredns/hosts (script markers), chmod 644 hosts,
 #     rollout restart kube-system/coredns, static pod bounce.
+#   - Safe to re-run over an earlier install: conf.d, TLS, Service and CoreDNS entries are overwritten on every
+#     Control Plane, and an existing depot-registry is deleted and re-created with the regenerated CA.
 #   - POSTs depot-registry (image_registry.port 443) to .../supervisors/<SUPERVISOR_ID>/container-image-registries
 #     using CreateSpec: name, default_registry, image_registry { hostname, port, certificate_chain, ... }.
 #
@@ -350,7 +352,7 @@ unregister_depot_registry() {
 write_nginx_template() {
     local tpl="${WORKDIR}/depot-nginx.tpl"
     cat >"${tpl}" <<'TPL'
-map $upstream_http_www_authenticate $new_www_authenticate {
+map $upstream_http_www_authenticate $depot_www_authenticate {
     default "";
     '~(?<pre>.*)realm="[^"]+"(?<post>.*)' '${pre}realm="__DEPOT_REALM_BASE__"${post}';
 }
@@ -401,7 +403,7 @@ server {
         proxy_pass $depot_registry_upstream;
 
         proxy_hide_header www-authenticate;
-        add_header www-authenticate $new_www_authenticate always;
+        add_header www-authenticate $depot_www_authenticate always;
 
         if ($request_method !~ ^(GET|HEAD)$) {
             return 403;
@@ -724,6 +726,12 @@ if [[ "${OPERATION}" == "add" ]]; then
         remote_install_on_cp "${cp}"
         log "Done control plane VM ${cp}"
     done
+    # Re-run over an existing setup: the CA was regenerated above, so replace the old
+    # registration (stale certificate_chain) instead of failing on a duplicate POST.
+    if [[ -n "$(depot_registry_id_from_list | tr -d '\r\n')" ]]; then
+        log "${DEPOT_REGISTRY_NAME} already registered; replacing it with the regenerated CA"
+        unregister_depot_registry
+    fi
     register_supervisor_registry
 elif [[ "${OPERATION}" == "remove" ]]; then
     unregister_depot_registry

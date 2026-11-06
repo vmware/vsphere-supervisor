@@ -516,13 +516,16 @@ Software Depot config update is success!
 
 ## 7. Ensure Harbor is configured on Supervisor
 
-In a VCF deployment that includes VCF Automation, follow [Using Harbor as a VCF service documentation](https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-service-administration-and-development/9-1/using-harbor-as-vcf-service/using-harbor-as-a-vcf-service.html) to install and configure Harbor as a VCF service on a Supervisor in a VCF region. Once Harbor VCF service is up and the corresponding Supervisor Service images and VKS Standard Packages images are uploaded to the OCI registry on Software Depot, Supervisor Services and VKS Standard Packages can be installed using the same workflows as in an internet-connected environment.
+In a VCF deployment that includes VCF Automation, follow [Using Harbor as a VCF service documentation](https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-service-administration-and-development/9-1/using-harbor-as-vcf-service/using-harbor-as-a-vcf-service.html) to install and configure Harbor as a VCF service on a Supervisor in a VCF region. Once Harbor VCF service is up and the corresponding Supervisor Service images and VKS Standard Packages images are uploaded to the OCI registry on Software Depot, Supervisor Services and VKS Standard Packages can be installed using the same workflows as in an internet-connected environment. Note that below steps 7a and 7b are not needed if VCF automation is installed.
 
 If your VCF deployment does not include VCF Automation, or you are running a VVF deployment, perform step 7a and 7b first, then follow [Deploy Harbor Supervisor Service in VVF without VCFA](https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-service-administration-and-development/9-1/using-harbor-as-vcf-service/installing-and-configuring-harbor-and-contour/deploy-harbor-supervisor-service-in-vvf-without-vcfa.html) to install the Harbor Supervisor Service manually.
 
 ### 7a. Configure a management proxy on the Supervisor to pull Harbor images from Software Depot
 
 Software Depot lives on the management network, so a management proxy is required to pull Harbor Supervisor Service images from it. The [`manage-depot-image-proxy.sh`](scripts/manage-depot-image-proxy.sh) script can add and remove this management proxy on a Supervisor in a vCenter. It requires that the Software Depot endpoint is already configured on the vCenter and that you have the vCenter and Supervisor identifiers along with the necessary credentials. If the Supervisor is configured with a proxy for image pulling, this domain `depot-image-proxy.kube-system.svc.cluster.local` should be added to the list of hosts excluded from the configured supervisor proxy via Supervisor proxy configuration UI or API.
+
+Always use the latest version of the script from this repository, especially if you ran an earlier version or encounter image pull issues through the management proxy. Re-running `add` with the latest script updates the existing proxy configuration on each Control Plane VM and re-registers `depot-registry` in place.
+
 ```bash
 ./manage-depot-image-proxy.sh -h
 
