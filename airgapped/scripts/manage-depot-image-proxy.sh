@@ -85,6 +85,8 @@ SUPERVISOR_ID="$5"
 command -v sshpass >/dev/null 2>&1 || die "sshpass is required (e.g. install sshpass)"
 command -v ssh >/dev/null 2>&1 || die "ssh is required"
 
+# ssh joins the remote command into one string that the remote shell re-parses, so each argument is
+# escaped with printf %q; otherwise characters such as $ in a password would be expanded or split.
 # shellcheck disable=SC2029
 # Do not use BatchMode=yes here: it disables password and keyboard-interactive auth, so sshpass cannot sign in.
 exec sshpass -p "${VC_SSH_PASSWORD}" ssh \
@@ -94,7 +96,7 @@ exec sshpass -p "${VC_SSH_PASSWORD}" ssh \
     -o StrictHostKeyChecking=no \
     -o UserKnownHostsFile=/dev/null \
     "root@${VC_HOST}" \
-    bash -s -- "${VC_HOST}" "${VC_ADMIN_USER}" "${VC_ADMIN_PASSWORD}" "${SUPERVISOR_ID}" "${OPERATION}" <<'REMOTE'
+    "bash -s -- $(printf '%q ' "${VC_HOST}" "${VC_ADMIN_USER}" "${VC_ADMIN_PASSWORD}" "${SUPERVISOR_ID}" "${OPERATION}")" <<'REMOTE'
 set -euo pipefail
 
 VC_API_HOST="$1"
@@ -156,12 +158,18 @@ fetch_vc_ca() {
 }
 
 vc_session() {
-    local out
+    local body http
+    body="${WORKDIR}/session.json"
     # shellcheck disable=SC2086
-    out="$(curl -sS ${VC_CACERT} -u "${VC_ADMIN_USER}:${VC_ADMIN_PASSWORD}" \
+    http="$(curl -sS ${VC_CACERT} -o "${body}" -w '%{http_code}' \
+        -u "${VC_ADMIN_USER}:${VC_ADMIN_PASSWORD}" \
         -X POST "https://${VC_API_HOST}/api/session")" || die "vCenter session POST failed"
-    SESSION_TOKEN="$(printf '%s' "${out}" | tr -d '"\r\n')"
-    [[ -n "${SESSION_TOKEN}" ]] || die "Empty session token from vCenter"
+    if [[ "${http}" != 2* ]]; then
+        die "vCenter authentication failed (HTTP ${http}): $(tr -d '\r\n' < "${body}" | head -c 300)"
+    fi
+    # A successful reply is a JSON string holding the session id.
+    SESSION_TOKEN="$(jq -r 'if type=="string" then . else empty end' "${body}" 2>/dev/null)" || SESSION_TOKEN=""
+    [[ -n "${SESSION_TOKEN}" ]] || die "Unexpected session reply from vCenter: $(head -c 300 "${body}")"
 }
 
 uri_path_escape() {
